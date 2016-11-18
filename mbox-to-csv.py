@@ -8,23 +8,27 @@ check = 0
 print "\n\n-------------------------------------------------------------"
 print "\t\t\tMBOX EMAIL GRABBER"
 print "-------------------------------------------------------------"
-mboxInput = raw_input('Digite o nome do arquivo .mbox: ')
-mboxFile = mboxInput+".mbox"
+mboxFile = raw_input('Type the name of the file with .mbox: ')
+# mboxFile = mboxInput+".mbox"
+print "-------------------------------------------------------------"
+emailInput = raw_input('Enter the sender\'s email: ')
+email = "<"+emailInput+">"
+
 print "-------------------------------------------------------------"
 if os.path.isfile(mboxFile):
     if os.path.isfile("emails.csv"):
-        print "\t\t\tATENCAO!"
-        print "\nArquivo emails.csv ja existente!"
-        sobre = raw_input('Deseja sobrescrever ? SIM (s) OU NAO (n): ')
+        print "\t\t\tAttention!"
+        print "\nCSV file already exists!"
+        sobre = raw_input('Want to override it? YES (y) OR NO (n): ')
         if (sobre.rstrip() == 'n' or sobre.rstrip() == 'N'):
             print "-------------------------------------------------------------"
-            print "\nREMOVA ou DELETE da pasta o arquivo emails.csv\n"
+            print "\nREMOVE or DELETE from the folder the emails.csv file\n"
             print "-------------------------------------------------------------"
-        elif (sobre.rstrip() == 's' or sobre.rstrip() == 'S'):
+        elif (sobre.rstrip() == 'y' or sobre.rstrip() == 'Y'):
             fo2 = open("emails.csv", "w+")
             with open(mboxFile, "r") as openfileobject:
                 for line in openfileobject:
-                    if (check == 0 and line.find("From: Tiago Fonseca",0,20) >= 0):
+                    if (check == 0 and line.find("From: ",0,7) >= 0 and line.find(email,0,len(line)) >= 0):
                         check = 1
                     elif (check == 1):
                         if(line.find("To: ",0,5) >= 0):
@@ -38,14 +42,15 @@ if os.path.isfile(mboxFile):
                 print "\n-------------------------------------------------------------\n"
         else:
             print "-------------------------------------------------------------"
-            print "\nOpcao invalida\n"
+            print "\nInvalid Option\n"
             print "-------------------------------------------------------------"
     else:
         print "-------------------------------------------------------------\n"
         fo2 = open("emails.csv", "w+")
+        print email
         with open(mboxFile, "r") as openfileobject:
             for line in openfileobject:
-                if (check == 0 and line.find("From: Tiago Fonseca",0,20) >= 0):
+                if (check == 0 and line.find("From: ",0,7) >= 0 and line.find(email,0,len(line)) >= 0):
                     check = 1
                 elif (check == 1):
                     if(line.find("To: ",0,5) >= 0):
